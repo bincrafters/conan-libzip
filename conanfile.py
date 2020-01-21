@@ -41,7 +41,7 @@ class LibZipConan(ConanFile):
             self.requires.add("bzip2/1.0.8")
 
         if self.options.with_openssl:
-            self.requires.add("openssl/1.0.2t")
+            self.requires.add("openssl/1.0.2u")
 
     def source(self):
         sha256 = "be694a4abb2ffe5ec02074146757c8b56084dbcebf329123c84b205417435e15"
