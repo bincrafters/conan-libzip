@@ -10,7 +10,6 @@ class LibZipConan(ConanFile):
     homepage = "https://github.com/nih-at/libzip"
     license = "BSD-3-Clause"
     topics = ("conan", "zip", "libzip", "zip-archives", "zip-editing")
-    exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt", "0001-void-pointer.patch"]
     generators = "cmake"
     _source_subfolder = "source_subfolder"
