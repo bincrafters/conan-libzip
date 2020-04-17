@@ -10,7 +10,7 @@ class LibZipConan(ConanFile):
     homepage = "https://github.com/nih-at/libzip"
     license = "BSD-3-Clause"
     topics = ("conan", "zip", "libzip", "zip-archives", "zip-editing")
-    exports_sources = ["CMakeLists.txt", "0001-void-pointer.patch"]
+    exports_sources = ["CMakeLists.txt", "patches/*"]
     generators = "cmake"
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
@@ -43,9 +43,7 @@ class LibZipConan(ConanFile):
             self.requires.add("openssl/1.0.2u")
 
     def source(self):
-        sha256 = "be694a4abb2ffe5ec02074146757c8b56084dbcebf329123c84b205417435e15"
-        source_url = "https://libzip.org/download"
-        tools.get("{0}/{1}-{2}.tar.gz".format(source_url, self.name, self.version), sha256=sha256)
+        tools.get(**self.conan_data["sources"][self.version])
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
@@ -58,7 +56,7 @@ class LibZipConan(ConanFile):
         cmake.configure()
         return cmake
 
-    def exclude_targets(self):
+    def _exclude_targets(self):
         cmake_file = os.path.join(self._source_subfolder, "CMakeLists.txt")
         excluded_targets = ["regress", "examples", "man"]
         for target in excluded_targets:
@@ -69,8 +67,9 @@ class LibZipConan(ConanFile):
         tools.replace_in_file(cmake_file, "MESSAGE(FATAL_ERROR", "MESSAGE(STATUS")
 
     def build(self):
-        tools.patch(base_path=self._source_subfolder, patch_file="0001-void-pointer.patch")
-        self.exclude_targets()
+        for patch in self.conan_data["patches"][self.version]:
+            tools.patch(**patch)
+        self._exclude_targets()
         cmake = self._configure_cmake()
         cmake.build()
 
