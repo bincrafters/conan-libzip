@@ -37,10 +37,10 @@ class LibZipConan(ConanFile):
 
     def requirements(self):
         if self.options.with_bzip2:
-            self.requires.add("bzip2/1.0.8")
+            self.requires("bzip2/1.0.8")
 
         if self.options.with_openssl:
-            self.requires.add("openssl/1.0.2u")
+            self.requires("openssl/1.0.2u")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
